@@ -1,14 +1,22 @@
 const express = require('express')
 const { Products } = require('./data')
+const {people}=require('./data')
 const path = require('path')
 const app = express()
 const logger = require('./logger')
 const authorize =require('./authorize')
 const morgan = require('morgan')
 //
-// app.use([logger,authorize])
+const bodyParser = require('body-parser');
 
+// Middleware to parse JSON bodies
+app.use(bodyParser.json());
+// app.use([logger,authorize])
+// app.use(express.urlencoded({ extended: true }));
+
+app.use(express.static('./frontend-files'))
 app.use(morgan('tiny'))
+
 app.get('/',(req,res)=>{
     console.log('this is called')
     res.send('Hello World')
@@ -65,6 +73,32 @@ app.get('/api/v1/query',  (req, res) => {
     }
 
     res.json(sortedProducts)
+})
+
+
+app.get('/api/people',(req,res)=>{
+    res.status(200).json({success:true,data:people})
+})
+
+app.post('/api/people',(req,res)=>{
+    const {name}= req.body
+ 
+
+    if(!name){
+        return res.status(400).json({success:false,msg:'please provide name'})
+    }
+    return res.status(201).json({success:true,person:name})
+
+})
+app.post('/login',(req,res)=>{
+    console.log(req.body);
+    const {name}= req.body
+ 
+
+    if(name){
+        return res.status(200).send(`welcome ${name}`)
+    }
+    return res.status(200).send('please provide name')
 })
 
 
