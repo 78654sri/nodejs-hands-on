@@ -90,6 +90,48 @@ app.post('/api/people',(req,res)=>{
     return res.status(201).json({success:true,person:name})
 
 })
+
+app.put('/api/people/:id', (req, res) => {
+    const { id } = req.params;
+    const { name } = req.body;
+
+    const person = people.find((person) => person.id === Number(id));
+    if (!person) {
+        return res.status(404).json({ success: false, msg: 'person not found' });
+    }
+
+
+    const newPeople = people.map((person) => {
+        if (person.id === Number(id)) {
+            return { ...person, name: name };
+        }
+        return person;
+    });
+
+
+    people = newPeople;
+
+    return res.status(200).json({ success: true, data: people });
+});
+
+app.delete('/api/people/:id', (req, res) => {
+    const { id } = req.params;
+
+
+    const person = people.find((person) => person.id === Number(id));
+    if (!person) {
+        return res.status(404).json({ success: false, msg: 'person not found' });
+    }
+
+
+    const newPeople = people.filter((people)=>person.id!==Number(id))
+
+    people = newPeople;
+
+    return res.status(200).json({ success: true, data: people });
+});
+
+
 app.post('/login',(req,res)=>{
     console.log(req.body);
     const {name}= req.body
@@ -100,7 +142,6 @@ app.post('/login',(req,res)=>{
     }
     return res.status(200).send('please provide name')
 })
-
 
 app.get('/items',(req,res)=>{
     res.json('items')
