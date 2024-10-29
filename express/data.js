@@ -51,4 +51,12 @@ const Products = [
     }
 
   ];
-  module.exports={ Products } 
+
+  const people = [
+    {id:1,name:'varshi'},
+    {id:2,name:'pooja'},
+    {id:3,name:'venkat'},
+    {id:4,name:'sowmya'},
+    {id:5,name:'balu'}
+  ]
+  module.exports={ Products,people } 
